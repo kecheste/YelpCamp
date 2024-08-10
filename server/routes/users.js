@@ -5,6 +5,10 @@ const user = require("../controllers/users");
 
 router.route("/register").post(catchAsync(user.registerUser));
 
+router.get("/", (req, res) => {
+  res.send("Hello Camper!");
+});
+
 router.route("/login").post(user.loginUser);
 
 router.get("/getUser", (req, res) => {
