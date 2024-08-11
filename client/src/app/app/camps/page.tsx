@@ -31,6 +31,11 @@ import EditCampgroundWindow from "@/components/ui/EditCampgroundWindow";
 const BASE_URL = "https://api.geoapify.com/v1/geocode/reverse";
 
 function Page() {
+  useEffect(() => {
+    window.window.scrollTo(0, 0);
+    window.document.title = "YelpCamp";
+  }, []);
+
   const signInOpen = useAuthWindowStore((set) => set.signInOpen);
   const setSignInOpen = useAuthWindowStore((set) => set.setSignInOpen);
   const signUpOpen = useAuthWindowStore((set) => set.signUpOpen);
