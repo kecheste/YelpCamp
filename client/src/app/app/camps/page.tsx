@@ -32,7 +32,7 @@ const BASE_URL = "https://api.geoapify.com/v1/geocode/reverse";
 
 function Page() {
   useEffect(() => {
-    window.window.scrollTo(0, 0);
+    window.scrollTo(0, 0);
     window.document.title = "YelpCamp";
   }, []);
 
