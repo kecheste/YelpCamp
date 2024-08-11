@@ -264,7 +264,7 @@ function Page() {
             <div className="flex items-center gap-3 mt-4">
               <ImLocation2 size={20} className="text-gray-600" />
               <p className="text-gray-600 text-md">
-                {Math.round(distance / 1000)} Km from your current location
+                {Math.round(distance! / 1000)} Km from your current location
               </p>
             </div>
             <div className="flex items-center gap-3 mt-4">
