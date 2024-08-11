@@ -1,54 +1,16 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { RxCross1 } from "react-icons/rx";
 import CampgroundCard from "./CampgroundCard";
 import haversineDistance from "@/helpers/haverSineDistance";
-import api from "@/helpers/api";
+import { useAuthStore } from "@/stores/authStore";
+import { useWindowStore } from "@/stores/windowStore";
 
-function Favorites({
-  setFavoritesOpen,
-  setDetailsOpen,
-  handleSelectCampground,
-  selectedCampground,
-}: {
-  setFavoritesOpen: (value: boolean) => void;
-  setDetailsOpen: (value: boolean) => void;
-  handleSelectCampground: (value: string) => void;
-  selectedCampground: string;
-}) {
-  const [campgrounds, setCampgrounds] = useState<
-    {
-      _id: string;
-      name: string;
-      description: string;
-      location: string;
-      images: {
-        _id: string;
-        url: string;
-        filename: string;
-      }[];
-      rating: number;
-      favorites: number;
-      price: number;
-      visits: number;
-      position: { lat: number; lng: number };
-      reviews: { id: number; name: string; rating: number; review: string }[];
-    }[]
-  >([]);
+function Favorites() {
+  const favorites = useAuthStore((state) => state.favorites);
 
-  useEffect(() => {
-    async function fetchCampgrounds() {
-      const response = await api.get("/campgrounds");
-      if (!response.data) {
-        return;
-      }
-      console.log(response.data);
-      setCampgrounds(response.data);
-    }
-
-    fetchCampgrounds();
-  }, []);
+  const setFavoritesOpen = useWindowStore((state) => state.setFavoritesOpen);
 
   return (
     <div className="absolute w-[1000px] h-2/3 bg-white rounded-lg flex items-center justify-center top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30">
@@ -63,22 +25,20 @@ function Favorites({
           <p className="text-black">Favorites</p>
         </div>
         <div className="h-full mb-4 w-full flex flex-wrap gap-4 overflow-y-scroll p-4 bg-gray-100">
-          {campgrounds.map((campground: any) => (
+          {favorites.map((favorite: any) => (
             <CampgroundCard
-              campground={campground}
-              setDetailsOpen={setDetailsOpen}
-              setSelectedCampground={handleSelectCampground}
-              selectedCampground={selectedCampground}
+              key={favorite._id}
+              campground={favorite}
               nearbyCampgrounds={
-                campgrounds.filter((campground1) => {
+                favorites.filter((favorite1) => {
                   const distance1 = haversineDistance(
                     {
-                      lat: campground1.position.lat,
-                      lng: campground1.position.lng,
+                      lat: favorite1.position.lat,
+                      lng: favorite1.position.lng,
                     },
                     {
-                      lat: campground.position.lat,
-                      lng: campground.position.lng,
+                      lat: favorite.position.lat,
+                      lng: favorite.position.lng,
                     }
                   );
                   return distance1 <= 100;

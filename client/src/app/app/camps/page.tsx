@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import CampgroundCard from "@/components/ui/CampgroundCard";
@@ -12,7 +13,6 @@ import { FaCampground } from "react-icons/fa";
 import { CiGlobe, CiStar } from "react-icons/ci";
 import { MdFavoriteBorder } from "react-icons/md";
 import { ImLocation2 } from "react-icons/im";
-import { useGeolocation } from "@/components/hooks/useGeolocation";
 import calculateDistance from "@/helpers/calculateDistance";
 import Spinner from "@/components/ui/Spinner";
 import Favorites from "@/components/ui/Favorites";
@@ -22,126 +22,115 @@ import { useAuthWindowStore } from "@/stores/authWindow";
 import SignInWindow from "@/components/ui/SignInWindow";
 import SignUpWindow from "@/components/ui/SignUpWindow";
 import { Toaster } from "react-hot-toast";
-import api from "@/helpers/api";
 import { Campground } from "@/interfaces/types";
 import { useCampStore } from "@/stores/campStore";
+import axios from "axios";
+import { useWindowStore } from "@/stores/windowStore";
+import EditCampgroundWindow from "@/components/ui/EditCampgroundWindow";
 
-const BASE_URL = "https://api.bigdatacloud.net/data/reverse-geocode-client";
+const BASE_URL = "https://api.geoapify.com/v1/geocode/reverse";
 
 function Page() {
-  const user = useAuthStore((set) => set.user);
   const signInOpen = useAuthWindowStore((set) => set.signInOpen);
   const setSignInOpen = useAuthWindowStore((set) => set.setSignInOpen);
   const signUpOpen = useAuthWindowStore((set) => set.signUpOpen);
   const setSignUpOpen = useAuthWindowStore((set) => set.setSignUpOpen);
 
   const checkAuth = useAuthStore((set) => set.checkAuth);
+  const getAllFavorites = useAuthStore((set) => set.getAllFavorites);
 
-  useEffect(() => {
-    checkAuth();
-  }, []);
+  const setCreateCampOpen = useWindowStore((set) => set.setCreateCampOpen);
+  const createCampOpen = useWindowStore((set) => set.createCampOpen);
+  const editWindowOpen = useWindowStore((set) => set.editWindowOpen);
+  const favoritesOpen = useWindowStore((state) => state.favoritesOpen);
+  const setFavoritesOpen = useWindowStore((state) => state.setFavoritesOpen);
+  const detailsOpen = useWindowStore((state) => state.detailsOpen);
+  const setDetailsOpen = useWindowStore((state) => state.setDetailsOpen);
+  const query = useWindowStore((state) => state.query);
+  const setQuery = useWindowStore((state) => state.setQuery);
+  const myPosition = useWindowStore((state) => state.myPosition);
+  const getPosition = useWindowStore((state) => state.getPosition);
+  const isLoadingPosition = useWindowStore((state) => state.isLoadingPosition);
+  const selectedCampground = useWindowStore(
+    (state) => state.selectedCampground
+  );
+  const setSelectedLocation = useWindowStore(
+    (state) => state.setSelectedLocation
+  );
+  const selectedLocation = useWindowStore((state) => state.selectedLocation);
+  const cityName = useWindowStore((state) => state.cityName);
+  const setCityName = useWindowStore((state) => state.setCityName);
+  const country = useWindowStore((state) => state.country);
+  const setCountry = useWindowStore((state) => state.setCountry);
 
+  const isLoading = useCampStore((state) => state.loading);
+  const campgrounds = useCampStore((state) => state.campgrounds);
   const fetchAllCampgrounds = useCampStore(
     (state) => state.fetchAllCampgrounds
   );
-  const isLoading = useCampStore((state) => state.loading);
-  const campgrounds = useCampStore((state) => state.campgrounds);
-
-  useEffect(() => {
-    fetchAllCampgrounds();
-  }, []);
-
-  const {
-    isLoading: isLoadingPosition,
-    position: geolocationPosition,
-    getPosition,
-  } = useGeolocation();
-
-  const [createCampOpen, setCreateCampOpen] = useState(false);
-  const [favoritesOpen, setFavoritesOpen] = useState(false);
-  const [detailsOpen, setDetailsOpen] = useState(false);
 
   const [filteredCampgrounds, setFilteredCampgrounds] = useState(campgrounds);
-  const [selectedCampground, setSelectedCampground] = useState("");
-  const [query, setQuery] = useState("");
   const [isLoadingGeocoding, setIsLoadingGeocoding] = useState(false);
-  const [cityName, setCityName] = useState("");
-  const [country, setCountry] = useState("");
-  const [geocodingError, setGeocodingError] = useState("");
-
   const [distance, setDistance] = useState(0);
-
-  const [myPosition, setMyPosition] = useState({
-    lat: geolocationPosition.lat,
-    lng: geolocationPosition.lng,
-  });
-
-  const [selectedLocation, setSelectedLocation] = useState(myPosition);
 
   useEffect(() => {
     getPosition();
+    checkAuth();
+    getAllFavorites();
+    fetchAllCampgrounds();
   }, []);
 
   useEffect(() => {
-    window.localStorage.foo = "bar";
-  }, []);
-
-  useEffect(() => {
-    if (geolocationPosition) {
-      setMyPosition({
-        lat: geolocationPosition.lat,
-        lng: geolocationPosition.lng,
-      });
+    if (myPosition) {
       setSelectedLocation({
-        lat: geolocationPosition.lat,
-        lng: geolocationPosition.lng,
+        lat: myPosition.lat,
+        lng: myPosition.lng,
       });
     }
-  }, [geolocationPosition]);
+  }, [myPosition]);
 
-  //   calculating distance
   useEffect(() => {
     if (selectedLocation) {
       const distance = calculateDistance(
-        geolocationPosition.lat,
-        geolocationPosition.lng,
+        myPosition.lat,
+        myPosition.lng,
         selectedLocation.lat,
         selectedLocation.lng
       );
       setDistance(distance);
     }
-  }, [selectedLocation, geolocationPosition]);
+  }, [myPosition, selectedLocation]);
 
   useEffect(() => {
     if (isLoadingPosition) return;
 
+    if (selectedLocation.lat === 0 || selectedLocation.lng === 0) return;
+
     async function fetchCityData() {
       try {
         setIsLoadingGeocoding(true);
-        setGeocodingError("");
 
-        const res = await fetch(
-          `${BASE_URL}?latitude=${selectedLocation.lat}&longitude=${selectedLocation.lng}`
+        const res = await axios.get(
+          `${BASE_URL}?lat=${selectedLocation.lat}&lon=${selectedLocation.lng}&apiKey=899f617a9c22413db5c18e929b0379e7`
         );
-        const data = await res.json();
 
-        if (!data.countryCode) {
+        if (!res) {
           throw new Error(
             "That doesn't seem to be a city. Click somewhere else 😉"
           );
         }
 
-        setCityName(data.city || data.locality || "");
-        setCountry(data.countryName);
+        setCityName(res.data.features[0].properties.city || "");
+        setCountry(res.data.features[0].properties.country || "");
       } catch (err: any) {
-        setGeocodingError(err.message);
+        console.log(err.message);
       } finally {
         setIsLoadingGeocoding(false);
       }
     }
 
     fetchCityData();
-  }, [isLoadingPosition, selectedLocation, myPosition]);
+  }, [myPosition, selectedLocation]);
 
   const Map = useMemo(
     () =>
@@ -151,25 +140,6 @@ function Page() {
       }),
     []
   );
-
-  const handleCloseCreateWindow = () => {
-    setCreateCampOpen(false);
-  };
-
-  const handleCloseDetailsWindow = () => {
-    setDetailsOpen(false);
-  };
-
-  const handleSelectCampground = (id: string) => {
-    setSelectedCampground(id);
-    console.log(campgrounds.find((campground) => campground._id === id));
-    setSelectedLocation({
-      lat: campgrounds.find((campground) => campground._id === id)!.position
-        .lat,
-      lng: campgrounds.find((campground) => campground._id === id)!.position
-        .lng,
-    });
-  };
 
   useEffect(() => {
     const handleSearch = () => {
@@ -232,8 +202,8 @@ function Page() {
   const setAuthWindowOpen = useAuthWindowStore((state) => state.setIsOpen);
 
   const handleCloseWindows = () => {
-    handleCloseCreateWindow();
-    handleCloseDetailsWindow();
+    setCreateCampOpen(false);
+    setDetailsOpen(false);
     setAuthWindowOpen(false);
     setFavoritesOpen(false);
     setSignInOpen(false);
@@ -247,6 +217,7 @@ function Page() {
         favoritesOpen ||
         authWindowOpen ||
         signInOpen ||
+        editWindowOpen ||
         signUpOpen) && (
         <div
           className="absolute inset-0 bg-black opacity-50 z-20"
@@ -261,27 +232,22 @@ function Page() {
         <div
           className="absolute inset-0 bg-black opacity-5 z-10"
           onClick={() => {
-            handleCloseCreateWindow();
-            handleCloseDetailsWindow();
+            setCreateCampOpen(false);
+            setDetailsOpen(false);
             setFavoritesOpen(false);
             setSignInOpen(false);
             setSignUpOpen(false);
           }}
         ></div>
       )}
-      <HeaderCamps
-        query={query}
-        handleSearch={setQuery}
-        setCreateCampOpen={setCreateCampOpen}
-        setFavoritesOpen={setFavoritesOpen}
-      />
+      <HeaderCamps handleSearch={setQuery} />
       <Toaster />
-      <div className="flex items-center gap-4 w-full h-1/2 mb-8">
+      <div className="flex items-center gap-2 w-full h-1/2 mb-2">
         <div className="w-full h-full rounded-lg shadow-sm z-0 border-2 border-white">
           <Map
             setSelectedLocation={setSelectedLocation}
             campgrounds={filteredCampgrounds}
-            posix={[selectedLocation.lat, selectedLocation.lng]}
+            posix={selectedLocation}
           />
         </div>
         {isLoadingGeocoding ? (
@@ -339,9 +305,6 @@ function Page() {
             <CampgroundCard
               key={campground._id}
               campground={campground}
-              setDetailsOpen={setDetailsOpen}
-              setSelectedCampground={handleSelectCampground}
-              selectedCampground={selectedCampground}
               nearbyCampgrounds={
                 campgrounds.filter((campground1) => {
                   const distance1 = haversineDistance(
@@ -367,24 +330,25 @@ function Page() {
           myPosition={myPosition}
           selectedLocation={selectedLocation}
           setCreateCampOpen={setCreateCampOpen}
-          setSelectedLocation={setSelectedLocation}
           cityName={cityName}
           country={country}
         />
       )}
 
-      {favoritesOpen && (
-        <Favorites
-          setDetailsOpen={setDetailsOpen}
-          handleSelectCampground={handleSelectCampground}
-          selectedCampground={selectedCampground}
-          setFavoritesOpen={setFavoritesOpen}
+      {editWindowOpen && (
+        <EditCampgroundWindow
+          cityName={cityName}
+          country={country}
+          campground={campgrounds.find(
+            (campground) => campground._id === selectedCampground
+          )}
         />
       )}
 
+      {favoritesOpen && <Favorites />}
+
       {detailsOpen && selectedCampground && (
         <CampgroundDetails
-          setSelectedLocation={setSelectedLocation}
           campground={
             campgrounds.find(
               (campground) => campground._id === selectedCampground

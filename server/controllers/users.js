@@ -67,6 +67,16 @@ module.exports.loginUser = (req, res, next) => {
   })(req, res, next);
 };
 
+module.exports.getAllFavorites = async (req, res) => {
+  const user = await User.findById(req.user._id).populate("favorites");
+  res.json(user.favorites);
+};
+
+module.exports.getMyCampgrounds = async (req, res) => {
+  const user = await User.findById(req.user._id).populate("campgrounds");
+  res.json(user.campgrounds);
+};
+
 module.exports.logoutUser = (req, res) => {
   req.logout(function (err) {
     if (err) {

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import dynamic from "next/dynamic";
@@ -17,14 +18,9 @@ import { Campground, Review } from "@/interfaces/types";
 import { useReviewStore } from "@/stores/reviewStore";
 import toast from "react-hot-toast";
 import LoadingButton from "./LoadingButton";
+import Image from "next/image";
 
-function CampgroundDetails({
-  campground,
-  setSelectedLocation,
-}: {
-  campground: Campground;
-  setSelectedLocation: Dispatch<SetStateAction<{ lat: number; lng: number }>>;
-}) {
+function CampgroundDetails({ campground }: { campground: Campground }) {
   const [ratingForm, setRatingForm] = useState(0);
   const [body, setBody] = useState("");
   const [locading, setLoading] = useState(false);
@@ -91,7 +87,10 @@ function CampgroundDetails({
           <div className="w-full h-1/2 object-cover">
             <Carousel>
               {campground.images.map((image, index) => (
-                <img
+                <Image
+                  alt="camp"
+                  height={400}
+                  width={400}
                   key={index}
                   src={image.url}
                   className="w-[400px] max-h-[350px] object-cover"

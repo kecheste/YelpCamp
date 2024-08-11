@@ -8,6 +8,18 @@ const userSchema = new Schema({
     required: true,
     unique: true,
   },
+  campgrounds: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Campground",
+    },
+  ],
+  favorites: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Campground",
+    },
+  ],
 });
 userSchema.plugin(passportLocalMongoose);
 

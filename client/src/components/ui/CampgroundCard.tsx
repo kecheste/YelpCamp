@@ -1,26 +1,52 @@
 import { Campground } from "@/interfaces/types";
+import { useAuthStore } from "@/stores/authStore";
+import { useWindowStore } from "@/stores/windowStore";
 import Image from "next/image";
 import React from "react";
 import { FaCampground } from "react-icons/fa";
 import { IoLocationOutline } from "react-icons/io5";
-import { MdFavoriteBorder } from "react-icons/md";
+import { MdEdit, MdFavoriteBorder } from "react-icons/md";
 
 function CampgroundCard({
-  setDetailsOpen,
   campground,
-  setSelectedCampground,
-  selectedCampground,
   nearbyCampgrounds,
 }: {
-  setDetailsOpen: (value: boolean) => void;
   campground: Campground;
-  setSelectedCampground: (value: string) => void;
-  selectedCampground: string;
   nearbyCampgrounds: number;
 }) {
+  const favorites = useAuthStore((state) => state.favorites);
+
+  const user = useAuthStore((state) => state.user);
+
+  const addFavoriteCampground = useAuthStore(
+    (state) => state.addFavoriteCampground
+  );
+
+  const isFavorite = (favorites: Campground[], campgroundId: string) => {
+    return favorites.some((favorite) => favorite._id === campgroundId);
+  };
+
+  const setSelectedCampground = useWindowStore(
+    (state) => state.setSelectedCampground
+  );
+  const selectedCampground = useWindowStore(
+    (state) => state.selectedCampground
+  );
+  const setSelectedLocation = useWindowStore(
+    (state) => state.setSelectedLocation
+  );
+  const setDetailsOpen = useWindowStore((state) => state.setDetailsOpen);
+  const setEditWindowOpen = useWindowStore((state) => state.setEditWindowOpen);
+
   return (
     <div
-      onClick={() => setSelectedCampground(campground._id)}
+      onClick={() => {
+        setSelectedCampground(campground._id);
+        setSelectedLocation({
+          lat: campground.position.lat,
+          lng: campground.position.lng,
+        });
+      }}
       className={
         "flex relative flex-col gap-2 bg-white p-4 mb-2 rounded-xl w-[310px] h-[340px] cursor-pointer " +
         (selectedCampground === campground._id
@@ -57,9 +83,37 @@ function CampgroundCard({
       >
         Show Details
       </button>
-      <div className="absolute bg-white hover:bg-gray-100 rounded-full p-2.5 top-7 right-7 cursor-pointer">
-        <MdFavoriteBorder size={15} className="text-black" />
-      </div>
+      {user && (
+        <div className="absolute top-7 right-7 flex flex-col gap-2">
+          <div
+            className={
+              "rounded-full p-2.5 cursor-pointer " +
+              (isFavorite(favorites, campground._id)
+                ? "bg-red-500 hover:bg-red-600"
+                : "bg-white hover:bg-gray-100")
+            }
+          >
+            <MdFavoriteBorder
+              size={15}
+              className={
+                isFavorite(favorites, campground._id)
+                  ? "text-white"
+                  : "text-black"
+              }
+              onClick={() => addFavoriteCampground(campground._id)}
+            />
+          </div>
+          {user?._id === campground.author && (
+            <div className="rounded-full p-2.5 cursor-pointer bg-orange-400 hover:bg-orange-500">
+              <MdEdit
+                size={15}
+                className="text-white"
+                onClick={() => setEditWindowOpen(true)}
+              />
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

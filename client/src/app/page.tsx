@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import Details from "@/components/Details";
@@ -7,7 +8,8 @@ import SignInWindow from "@/components/ui/SignInWindow";
 import SignUpWindow from "@/components/ui/SignUpWindow";
 import { useAuthStore } from "@/stores/authStore";
 import { useAuthWindowStore } from "@/stores/authWindow";
-import React, { useEffect, useState } from "react";
+import { useWindowStore } from "@/stores/windowStore";
+import React, { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 
 function Page() {
@@ -17,11 +19,13 @@ function Page() {
   const setSignUpOpen = useAuthWindowStore((state) => state.setSignUpOpen);
   const isOpen = useAuthWindowStore((state) => state.isOpen);
   const setIsOpen = useAuthWindowStore((state) => state.setIsOpen);
+  const getPosition = useWindowStore((state) => state.getPosition);
 
   const checkAuth = useAuthStore((set) => set.checkAuth);
 
   useEffect(() => {
     checkAuth();
+    getPosition();
   }, []);
 
   const handleCloseWindows = () => {

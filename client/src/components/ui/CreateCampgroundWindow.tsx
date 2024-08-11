@@ -11,14 +11,13 @@ import Input from "./Input";
 import { IoMdPhotos } from "react-icons/io";
 import dynamic from "next/dynamic";
 import { LatLngExpression } from "leaflet";
-import api from "@/helpers/api";
 import { useCampStore } from "@/stores/campStore";
 import toast from "react-hot-toast";
+import { useWindowStore } from "@/stores/windowStore";
 
 function CreateCampgroundWindow({
   setCreateCampOpen,
   myPosition,
-  setSelectedLocation,
   selectedLocation,
   cityName,
   country,
@@ -28,7 +27,6 @@ function CreateCampgroundWindow({
   cityName: string;
   country: string;
   selectedLocation: { lat: number; lng: number };
-  setSelectedLocation: Dispatch<SetStateAction<{ lat: number; lng: number }>>;
 }) {
   const [campgroundName, setCampgroundName] = useState("");
   const [description, setDescription] = useState("");
@@ -46,6 +44,9 @@ function CreateCampgroundWindow({
   );
 
   const createCamp = useCampStore((state) => state.createCampground);
+  const setSelectedLocation = useWindowStore(
+    (state) => state.setSelectedLocation
+  );
 
   const createCampground = async (e: FormEvent) => {
     e.preventDefault();
@@ -159,7 +160,7 @@ function CreateCampgroundWindow({
               <div className="w-[600px] h-[300px] rounded-lg z-0 my-4 shadow-sm">
                 <Map
                   setSelectedLocation={setSelectedLocation}
-                  posix={myPosition}
+                  posix={selectedLocation}
                   zoom={14}
                 />
               </div>

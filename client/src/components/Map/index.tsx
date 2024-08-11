@@ -14,20 +14,17 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
 import "leaflet-defaulticon-compatibility";
 import Image from "next/image";
-import { Dispatch, SetStateAction } from "react";
 import { Campground } from "@/interfaces/types";
 
 interface MapProps {
   posix: LatLngExpression | LatLngTuple;
   zoom?: number;
   campgrounds?: Campground[];
-  setSelectedLocation?: Dispatch<SetStateAction<{ lat: number; lng: number }>>;
+  setSelectedLocation?: (value: { lat: number; lng: number }) => void;
 }
 
 const Map = (Map: MapProps) => {
   const { posix, campgrounds, zoom, setSelectedLocation } = Map;
-
-  window.localStorage.foo = "bar";
 
   return (
     <div className="relative w-full h-full">
@@ -79,7 +76,7 @@ function ChangeCenter({ position }: { position: LatLngExpression }) {
 }
 
 interface DetectClickProps {
-  setSelectedLocation?: Dispatch<SetStateAction<{ lat: number; lng: number }>>;
+  setSelectedLocation?: (value: { lat: number; lng: number }) => void;
 }
 
 function DetectClick({ setSelectedLocation }: DetectClickProps): any {

@@ -14,6 +14,15 @@ interface CampState {
     image: FileList,
     position: { lat: number; lng: number }
   ) => Promise<void>;
+  updateCampground: (
+    id: string,
+    title: string,
+    description: string,
+    location: string,
+    price: string,
+    position: { lat: number; lng: number }
+  ) => Promise<void>;
+  deleteCampground: (id: string) => Promise<void>;
   fetchAllCampgrounds: () => Promise<void>;
 }
 
@@ -56,6 +65,56 @@ export const useCampStore = create<CampState>((set) => ({
       set({
         loading: false,
         error: "An error occurred during creating the campground",
+      });
+    }
+  },
+  updateCampground: async (
+    id,
+    title,
+    description,
+    location,
+    price,
+    position
+  ) => {
+    try {
+      set({ loading: true, error: null });
+
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("description", description);
+      formData.append("location", location);
+      formData.append("price", price);
+      formData.append("position", JSON.stringify(position));
+
+      await api.patch(`/campgrounds/${id}`, {
+        title,
+        description,
+        location,
+        price,
+        position: JSON.stringify(position),
+      });
+
+      await useCampStore.getState().fetchAllCampgrounds();
+      set({ loading: false, error: null });
+    } catch (error) {
+      console.error(error);
+      set({
+        loading: false,
+        error: "An error occurred during updating the campground",
+      });
+    }
+  },
+  deleteCampground: async (id) => {
+    try {
+      set({ loading: true, error: null });
+      await api.delete(`/campgrounds/${id}`);
+      await useCampStore.getState().fetchAllCampgrounds();
+      set({ loading: false, error: null });
+    } catch (error) {
+      console.error(error);
+      set({
+        loading: false,
+        error: "An error occurred during deleting the campground",
       });
     }
   },

@@ -26,11 +26,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(mongoSanitize());
 
 const frontUrl = process.env.FRONT_URL;
-// `${frontUrl}`
 
 // CORS Middleware
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Origin", `${frontUrl}`);
   res.setHeader("Access-Control-Allow-Credentials", true);
   res.setHeader(
     "Access-Control-Allow-Methods",

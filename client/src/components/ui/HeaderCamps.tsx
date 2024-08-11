@@ -7,20 +7,19 @@ import Link from "next/link";
 import { useAuthWindowStore } from "@/stores/authWindow";
 import { redirect } from "next/navigation";
 import toast from "react-hot-toast";
+import { useWindowStore } from "@/stores/windowStore";
 
 function HeaderCamps({
-  setCreateCampOpen,
-  setFavoritesOpen,
-  query,
   handleSearch,
 }: {
-  setCreateCampOpen: (value: boolean) => void;
-  query: string;
   handleSearch: (value: string) => void;
-  setFavoritesOpen: (value: boolean) => void;
 }) {
   const user = useAuthStore((set) => set.user);
   const logout = useAuthStore((set) => set.logout);
+
+  const setFavoritesOpen = useWindowStore((state) => state.setFavoritesOpen);
+  const setCreateCampOpen = useWindowStore((state) => state.setCreateCampOpen);
+  const query = useWindowStore((state) => state.query);
 
   const setSignInOpen = useAuthWindowStore((state) => state.setSignInOpen);
   const setSignUpOpen = useAuthWindowStore((state) => state.setSignUpOpen);
@@ -67,7 +66,7 @@ function HeaderCamps({
 
   return (
     <div className="flex bg-white items-center justify-between py-2 px-6 w-full my-6 border border-gray-300 shadow-md rounded-full">
-      <Link href="/" className="text-lg text-gray-800">
+      <Link href="/app/camps" className="text-lg text-gray-800">
         YelpCamp
       </Link>
       <div className="flex items-center gap-2 px-4 py-2 border border-gray-300 hover:border-gray-400 rounded-full w-[400px]">

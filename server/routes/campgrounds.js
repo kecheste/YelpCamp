@@ -23,10 +23,14 @@ router
   .patch(
     isLoggedIn,
     isAuthor,
-    upload.array("image"),
+    // upload.array("image"),
     validateInput,
     catchAsync(campgrounds.updateCampground)
   )
   .delete(isLoggedIn, isAuthor, catchAsync(campgrounds.deleteCampground));
+
+router
+  .route("/:id/favorite")
+  .post(isLoggedIn, catchAsync(campgrounds.addFavoriteCampground));
 
 module.exports = router;
