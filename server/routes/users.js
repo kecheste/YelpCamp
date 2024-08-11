@@ -6,7 +6,7 @@ const { isLoggedIn } = require("../middleware");
 
 router.route("/register").post(catchAsync(user.registerUser));
 
-router.get("/", (req, res) => {
+router.route("/").get((req, res) => {
   res.send("Hello Camper!");
 });
 

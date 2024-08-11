@@ -1,7 +1,4 @@
-if (process.env.NODE_ENV !== "production") {
-  require("dotenv").config();
-}
-
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
@@ -27,7 +24,6 @@ app.use(mongoSanitize());
 
 const frontUrl = process.env.FRONT_URL;
 
-// CORS Middleware
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", frontUrl);
   res.setHeader("Access-Control-Allow-Credentials", true);
