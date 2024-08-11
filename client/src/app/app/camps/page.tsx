@@ -31,11 +31,6 @@ import EditCampgroundWindow from "@/components/ui/EditCampgroundWindow";
 const BASE_URL = "https://api.geoapify.com/v1/geocode/reverse";
 
 function Page() {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-    window.document.title = "YelpCamp";
-  }, []);
-
   const signInOpen = useAuthWindowStore((set) => set.signInOpen);
   const setSignInOpen = useAuthWindowStore((set) => set.setSignInOpen);
   const signUpOpen = useAuthWindowStore((set) => set.signUpOpen);
@@ -76,7 +71,7 @@ function Page() {
 
   const [filteredCampgrounds, setFilteredCampgrounds] = useState(campgrounds);
   const [isLoadingGeocoding, setIsLoadingGeocoding] = useState(false);
-  const [distance, setDistance] = useState(0);
+  const [distance, setDistance] = useState<number | null>(0);
 
   useEffect(() => {
     getPosition();
@@ -96,13 +91,15 @@ function Page() {
 
   useEffect(() => {
     if (selectedLocation) {
-      const distance = calculateDistance(
-        myPosition.lat,
-        myPosition.lng,
-        selectedLocation.lat,
-        selectedLocation.lng
-      );
-      setDistance(distance);
+      if (typeof window !== "undefined") {
+        const distance = calculateDistance(
+          myPosition.lat,
+          myPosition.lng,
+          selectedLocation.lat,
+          selectedLocation.lng
+        );
+        setDistance(distance);
+      }
     }
   }, [myPosition, selectedLocation]);
 
