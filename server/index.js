@@ -33,8 +33,6 @@ app.use(
   })
 );
 
-app.options("*", cors());
-
 // app.use((req, res, next) => {
 //   res.setHeader("Access-Control-Allow-Origin", frontUrl);
 //   res.header("Access-Control-Allow-Credentials", true);
