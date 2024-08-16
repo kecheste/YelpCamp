@@ -62,7 +62,11 @@ module.exports.loginUser = (req, res, next) => {
       if (err) {
         return res.send({ message: "An error occurred", success: false });
       }
-      return res.send({ message: "User logged in", success: true });
+      return res.send({
+        message: "User logged in",
+        success: true,
+        user: req.user,
+      });
     });
   })(req, res, next);
 };
