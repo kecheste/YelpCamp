@@ -12,7 +12,7 @@
       "dest": "",
       "methods": ["GET", "POST", "PUT", "DELETE", "PATCH"],
       "headers": {
-        "Access-Control-Allow-Origin": "*"
+        "Access-Control-Allow-Origin": "https://yelp-camp-kohl.vercel.app"
       }
     }
   ]
