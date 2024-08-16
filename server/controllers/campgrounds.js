@@ -3,7 +3,7 @@ const User = require("../models/user");
 const { cloudinary } = require("../cloudinary");
 
 module.exports.index = async (req, res) => {
-  const camps = await Campground.find({});
+  const camps = await Campground.find({}).populate("author");
   res.json(camps);
 };
 

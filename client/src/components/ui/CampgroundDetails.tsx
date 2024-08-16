@@ -2,19 +2,13 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import React, {
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import "@smastrom/react-rating/style.css";
 import { Rating, ThinStar } from "@smastrom/react-rating";
 import Input from "./Input";
-import { Campground, Review } from "@/interfaces/types";
+import { Campground } from "@/interfaces/types";
 import { useReviewStore } from "@/stores/reviewStore";
 import toast from "react-hot-toast";
 import LoadingButton from "./LoadingButton";
@@ -117,6 +111,15 @@ function CampgroundDetails({ campground }: { campground: Campground }) {
             <p className="text-md text-gray-500 mt-4">
               <span className="font-bold">Location:</span> {campground.location}
             </p>
+            <p className="text-md text-gray-500">
+              <span className="font-bold">Favorites:</span>{" "}
+              {campground.favorites}
+            </p>
+            <p className="text-md text-gray-500 mb-4">
+              <span className="font-bold">By:</span>{" "}
+              {campground.author.username}
+            </p>
+
             <p className="text-md text-gray-500 mt-4 bg-orange-400 rounded-full px-3 py-1 text-white w-[150px] text-center">
               ${campground.price}/night
             </p>
