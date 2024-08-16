@@ -25,7 +25,10 @@ app.use(mongoSanitize());
 const frontUrl = process.env.FRONT_URL;
 
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", `${frontUrl}`);
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://yelp-camp-kohl.vercel.app"
+  );
   res.setHeader("Access-Control-Allow-Credentials", true);
   res.setHeader(
     "Access-Control-Allow-Methods",
