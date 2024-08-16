@@ -12,6 +12,7 @@ const mongoSanitize = require("express-mongo-sanitize");
 const helmet = require("helmet");
 const MongoDBStore = require("connect-mongo");
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
 
 const campgroundRoutes = require("./routes/campgrounds");
 const reviewRoutes = require("./routes/reviews");
@@ -23,6 +24,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(mongoSanitize());
 
 const frontUrl = process.env.FRONT_URL;
+
+app.use(
+  cors({
+    origin: "https://yelp-camp-kohl.vercel.app",
+    credentials: true,
+  })
+);
 
 app.use((req, res, next) => {
   res.setHeader(
