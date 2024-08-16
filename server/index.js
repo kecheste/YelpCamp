@@ -22,6 +22,7 @@ app.use(methodOverride("_method"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(mongoSanitize());
+app.use(cors());
 
 const frontUrl = process.env.FRONT_URL;
 
