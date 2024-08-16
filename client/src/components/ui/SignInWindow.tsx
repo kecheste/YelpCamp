@@ -39,7 +39,7 @@ function SignInWindow() {
             setLoading(false);
           } else {
             toast.dismiss();
-            toast.error("Invalid credentials");
+            toast.error("Invalid credentials" + user.username);
             setLoading(false);
           }
         }

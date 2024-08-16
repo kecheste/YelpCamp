@@ -52,8 +52,10 @@ function Page() {
   const signUpOpen = useAuthWindowStore((state) => state.signUpOpen);
   const cityName = useWindowStore((state) => state.cityName);
   const country = useWindowStore((state) => state.country);
+  const checkAuth = useAuthStore((set) => set.checkAuth);
 
   useEffect(() => {
+    checkAuth();
     getMyCampgrounds();
   }, []);
 
