@@ -67,7 +67,7 @@ db.once("open", () => {
   console.log("Mongo connection established!!");
 });
 
-const secret = process.env.SECRET;
+const secret = "cZ9$9BgM#a9w8P@sL7*dX!J6LhE2xUvV";
 
 const sessionConfig = {
   store: MongoDBStore.create({
@@ -81,12 +81,18 @@ const sessionConfig = {
   saveUninitialized: false,
   cookie: {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: true,
     expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
     maxAge: 1000 * 60 * 60 * 24 * 7,
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    sameSite: "none",
   },
 };
+
+app.use((req, res, next) => {
+  console.log("Session:", req.session);
+  console.log("User:", req.user);
+  next();
+});
 
 const scriptSrcUrls = [
   "https://stackpath.bootstrapcdn.com/",
@@ -145,7 +151,7 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 app.use((req, res, next) => {
-  res.locals.currentUser = req.user;
+  res.locals.user = req.user;
   next();
 });
 
