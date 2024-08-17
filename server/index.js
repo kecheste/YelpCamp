@@ -34,7 +34,7 @@ app.use(
 );
 
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", frontUrl);
+  res.header("Access-Control-Allow-Origin", [frontUrl]);
   res.header(
     "Access-Control-Allow-Methods",
     "GET, OPTIONS, PATCH, DELETE, POST, PUT"
