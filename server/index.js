@@ -1,4 +1,5 @@
 require("dotenv").config();
+
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
@@ -28,10 +29,7 @@ const frontUrl = process.env.FRONT_URL;
 app.use(cors());
 
 app.use((req, res, next) => {
-  res.header(
-    "Access-Control-Allow-Origin",
-    "https://yelp-camp-kohl.vercel.app"
-  );
+  res.header("Access-Control-Allow-Origin", frontUrl);
   res.header(
     "Access-Control-Allow-Methods",
     "GET, OPTIONS, PATCH, DELETE, POST, PUT"
