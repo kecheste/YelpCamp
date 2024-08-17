@@ -25,16 +25,13 @@ app.use(mongoSanitize());
 
 const frontUrl = process.env.FRONT_URL;
 
-app.use(
-  cors({
-    origin: [frontUrl],
-    methods: ["GET", "POST", "PATCH", "DELETE", "PUT", "OPTIONS"],
-    credentials: true,
-  })
-);
+app.use(cors());
 
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", [frontUrl]);
+  res.header(
+    "Access-Control-Allow-Origin",
+    "https://yelp-camp-kohl.vercel.app"
+  );
   res.header(
     "Access-Control-Allow-Methods",
     "GET, OPTIONS, PATCH, DELETE, POST, PUT"
