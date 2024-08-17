@@ -12,7 +12,7 @@ router.route("/").get((req, res) => {
 
 router.route("/login").post(user.loginUser);
 
-router.route("/getUser").post(user.getUser);
+router.route("/getUser").get(user.getUser);
 
 router.get("/logout", user.logoutUser);
 
