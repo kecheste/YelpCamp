@@ -75,7 +75,7 @@ module.exports.getUser = (req, res, next) => {
   if (req.isAuthenticated()) {
     return res.json({ user: req.user });
   } else {
-    return res.json({ user: null });
+    return res.json({ user: null }).status(403);
   }
 };
 
