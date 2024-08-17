@@ -112,8 +112,8 @@ app.use(
   })
 );
 
-app.use(cookieParser(secret));
 app.use(session(sessionConfig));
+app.use(cookieParser(secret));
 
 app.use(passport.initialize());
 app.use(passport.session());
