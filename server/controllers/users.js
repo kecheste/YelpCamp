@@ -65,15 +65,13 @@ module.exports.loginUser = (req, res, next) => {
       return res.send({
         message: "User logged in",
         success: true,
-        user: req.user,
+        user: user,
       });
     });
   })(req, res, next);
 };
 
 module.exports.getUser = (req, res, next) => {
-  console.log("Session:", req.session);
-  console.log("User:", req.user);
   if (req.user) {
     return res.json({ user: req.user });
   } else {

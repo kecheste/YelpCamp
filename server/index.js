@@ -33,21 +33,6 @@ app.use(
   })
 );
 
-// app.use((req, res, next) => {
-//   res.setHeader("Access-Control-Allow-Origin", frontUrl);
-//   res.header("Access-Control-Allow-Credentials", true);
-//   res.header(
-//     "Access-Control-Allow-Methods",
-//     "GET,OPTIONS,PATCH,DELETE,POST,PUT"
-//   );
-//   res.header(
-//     "Access-Control-Allow-Headers",
-//     "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
-//   );
-
-//   next();
-// });
-
 const dbUrl = process.env.DB_URL;
 
 mongoose.connect(dbUrl, {
@@ -72,12 +57,13 @@ const sessionConfig = {
   name: "session",
   secret,
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: false,
   cookie: {
     httpOnly: true,
-    secure: true,
+    secure: process.env.NODE_ENV === "production",
     expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
     maxAge: 1000 * 60 * 60 * 24 * 7,
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
   },
 };
 
@@ -126,8 +112,8 @@ app.use(
   })
 );
 
-app.use(session(sessionConfig));
 app.use(cookieParser(secret));
+app.use(session(sessionConfig));
 
 app.use(passport.initialize());
 app.use(passport.session());
