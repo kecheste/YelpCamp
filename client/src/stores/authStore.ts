@@ -108,6 +108,8 @@ export const useAuthStore = create<AuthState>((set) => ({
     try {
       set({ loading: true });
       const res = await api.get("/getUser");
+      const check = await api.get("/campgrounds");
+      console.log(check);
       set({ user: res.data.user, loading: false, error: null });
     } catch {
       set({
