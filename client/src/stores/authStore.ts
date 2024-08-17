@@ -106,7 +106,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   checkAuth: async () => {
     try {
       set({ loading: true });
-      const res = await api.get("/getUser");
+      const res = await api.get("/getUser", { withCredentials: true });
       console.log(res);
       set({ user: res.data, loading: false, error: null });
     } catch {

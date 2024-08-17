@@ -71,6 +71,16 @@ module.exports.loginUser = (req, res, next) => {
   })(req, res, next);
 };
 
+module.exports.getUser = (req, res, next) => {
+  console.log("Session:", req.session);
+  console.log("User:", req.user);
+  if (req.user) {
+    return res.json({ user: req.user });
+  } else {
+    return res.json({ user: null });
+  }
+};
+
 module.exports.getAllFavorites = async (req, res) => {
   const user = await User.findById(req.user._id).populate("favorites");
   res.json(user.favorites);
