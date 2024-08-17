@@ -72,7 +72,7 @@ module.exports.loginUser = (req, res, next) => {
 };
 
 module.exports.getUser = (req, res, next) => {
-  if (req.user) {
+  if (req.isAuthenticated()) {
     return res.json({ user: req.user });
   } else {
     return res.json({ user: null });

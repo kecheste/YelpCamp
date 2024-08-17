@@ -32,7 +32,8 @@ export const useAuthStore = create<AuthState>((set) => ({
       set({ loading: true, error: null });
       const response = await api.post("/login", { username, password });
       if (response.data.success) {
-        set({ user: response.data.user, loading: false, error: null });
+        const res = await api.get("/getUser");
+        set({ user: res.data.user, loading: false, error: null });
       } else {
         set({ user: null, loading: false, error: response.data.message });
       }
@@ -107,7 +108,6 @@ export const useAuthStore = create<AuthState>((set) => ({
     try {
       set({ loading: true });
       const res = await api.get("/getUser");
-      console.log(res);
       set({ user: res.data.user, loading: false, error: null });
     } catch {
       set({
