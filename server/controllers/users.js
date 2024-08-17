@@ -73,8 +73,10 @@ module.exports.loginUser = (req, res, next) => {
 
 module.exports.getUser = (req, res, next) => {
   if (req.isAuthenticated()) {
+    console.log("User authenticated: ", req.user);
     return res.json({ user: req.user });
   } else {
+    console.log("No user authenticated");
     return res.json({ user: null }).status(403);
   }
 };
