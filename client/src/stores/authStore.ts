@@ -31,6 +31,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     try {
       set({ loading: true, error: null });
       const response = await api.post("/login", { username, password });
+      console.log(response);
       if (response.data.success) {
         set({ user: response.data.user, loading: false, error: null });
       } else {
