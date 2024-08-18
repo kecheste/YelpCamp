@@ -42,7 +42,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       set({
         user: null,
         loading: false,
-        error: "An error occurred during login",
+        error: "Wrong username or password",
       });
     }
   },
