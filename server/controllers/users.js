@@ -77,7 +77,6 @@ module.exports.loginUser = async (req, res, next) => {
     const { username, password } = req.body;
     const user = await authService.logInUser(username, password);
     const token = generateToken(user);
-    req.user = user;
 
     res.cookie("token", token, {
       httpOnly: true,

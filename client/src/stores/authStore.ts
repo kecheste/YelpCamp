@@ -31,11 +31,8 @@ export const useAuthStore = create<AuthState>((set) => ({
     try {
       set({ loading: true, error: null });
       const response = await api.post("/login", { username, password });
-      console.log(response);
       if (response.data.success) {
-        // localStorage.setItem("token", response.data.token);
         await useAuthStore.getState().checkAuth();
-        // set({ user: res.data.user, loading: false, error: null });
       } else {
         set({ user: null, loading: false, error: response.data.message });
       }
@@ -98,8 +95,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       await api.post(`/campgrounds/${campgroundId}/favorite`);
       await useAuthStore.getState().getAllFavorites();
       set({ loading: false, error: null });
-    } catch (error) {
-      console.error(error);
+    } catch {
       set({
         loading: false,
         error: "An error occurred during adding favorite campground",
@@ -127,7 +123,6 @@ export const useAuthStore = create<AuthState>((set) => ({
     try {
       set({ loading: true });
       const res = await api.get("/getMyCampgrounds");
-      console.log(res);
       set({ myCampgrounds: res.data.campgrounds, loading: false, error: null });
       set({ loading: false });
     } catch {
