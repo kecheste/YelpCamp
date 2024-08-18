@@ -86,7 +86,7 @@ module.exports.loginUser = (req, res, next) => {
 };
 
 module.exports.getUser = (req, res, next) => {
-  if (req.isAuthenticated()) {
+  if (req.user) {
     return res.status(200).json({
       success: true,
       user: {
@@ -97,7 +97,7 @@ module.exports.getUser = (req, res, next) => {
     });
   } else {
     return res
-      .status(401)
+      .status(203)
       .json({ success: false, message: "User not authenticated" });
   }
 };
