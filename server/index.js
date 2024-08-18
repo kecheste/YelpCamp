@@ -67,26 +67,6 @@ db.once("open", () => {
   console.log("Mongo connection established!!");
 });
 
-const secret = process.env.SECRET;
-
-const sessionConfig = {
-  store: MongoDBStore({
-    uri: dbUrl,
-    collection: "session",
-  }),
-  name: "session",
-  secret,
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    httpOnly: true,
-    secure: true,
-    expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
-    maxAge: 1000 * 60 * 60 * 24 * 7,
-    sameSite: "lax",
-  },
-};
-
 app.use((req, res, next) => {
   console.log("Session:", req.session);
   console.log("User:", req.user);
@@ -138,12 +118,31 @@ app.use(
   })
 );
 
-app.use(session(sessionConfig));
-app.use(cookieParser(secret));
+const secret = process.env.SECRET;
 
+app.use(
+  session({
+    store: MongoDBStore({
+      uri: dbUrl,
+      collection: "sessions",
+    }),
+    name: "session",
+    secret,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      secure: true,
+      expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+      sameSite: "lax",
+    },
+  })
+);
+app.use(cookieParser());
 app.use(passport.initialize());
 app.use(passport.authenticate("session"));
-// app.use(passport.session());
+
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());

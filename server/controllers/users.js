@@ -12,21 +12,17 @@ module.exports.registerUser = async (req, res, next) => {
     }
 
     if (password.length < 6) {
-      return res
-        .status(400)
-        .json({
-          success: false,
-          message: "Password must be at least 6 characters",
-        });
+      return res.status(400).json({
+        success: false,
+        message: "Password must be at least 6 characters",
+      });
     }
 
     if (username.length < 4) {
-      return res
-        .status(400)
-        .json({
-          success: false,
-          message: "Username must be at least 4 characters",
-        });
+      return res.status(400).json({
+        success: false,
+        message: "Username must be at least 4 characters",
+      });
     }
 
     const existingUser = await User.findOne({ username });
@@ -101,7 +97,7 @@ module.exports.getUser = (req, res, next) => {
     });
   } else {
     return res
-      .status(403)
+      .status(401)
       .json({ success: false, message: "User not authenticated" });
   }
 };
