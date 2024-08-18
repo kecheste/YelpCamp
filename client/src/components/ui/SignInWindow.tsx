@@ -61,20 +61,20 @@ function SignInWindow() {
 
   return (
     <div
-      className="absolute w-auto h-auto bg-white rounded-lg flex items-center justify-center top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30"
+      className="absolute lg:w-auto w-full h-auto bg-white rounded-lg flex items-center justify-center top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30"
       onClick={(e) => e.stopPropagation()}
     >
       {/* Content of the absolute component */}
-      <div className="flex flex-col divide-y divide-gray-400 items-center gap-4">
+      <div className="flex flex-col divide-y divide-gray-400 items-center gap-4 w-full">
         <div className="flex items-center gap-6 px-4 pt-2 self-start w-full">
           <div className="cursor-pointer" onClick={handleCloseSignIn}>
             <RxCross1 size={20} color="black" />
           </div>
           <p className="text-black">Log In to your account</p>
         </div>
-        <div className="flex gap-4 mb-5 flex-col px-2 py-4 sm:px-4 lg:px-6">
+        <div className="flex gap-4 mb-5 flex-col px-2 py-4 sm:px-4 lg:px-6 w-full">
           {true ? (
-            <div className="px-4 flex p-4 pb-10 gap-4 flex-col items-center">
+            <div className="px-4 flex p-4 pb-10 gap-4 flex-col items-center w-full">
               <Input
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}

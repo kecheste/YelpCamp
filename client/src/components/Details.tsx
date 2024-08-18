@@ -4,7 +4,7 @@ import { FaCampground } from "react-icons/fa";
 
 function Details() {
   return (
-    <div className="text-center w-[450px]">
+    <div className="text-center lg:w-[450px] w-full">
       <div className="flex flex-col gap-4 items-center justify-center">
         <p className="text-md text-gray-200">
           Discover the magic of untouched landscapes, connect with nature in its

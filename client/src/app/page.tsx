@@ -42,7 +42,7 @@ function Page() {
           onClick={() => handleCloseWindows()}
         ></div>
       )}
-      <div className="bg-cover w-full h-screen bg-bottom bg-[url('/back.jpg')] px-40 py-12 flex flex-col items-center justify-between">
+      <div className="bg-cover w-full h-screen bg-bottom bg-[url('/back.jpg')] px-4 lg:px-40 py-4 lg:py-12 flex flex-col items-center justify-between">
         <div className="w-full flex-grow relative z-20">
           <Header />
         </div>

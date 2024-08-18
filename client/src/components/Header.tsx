@@ -49,19 +49,19 @@ function Header() {
       <a href="/" className="text-lg text-gray-100">
         YelpCamp
       </a>
-      <div className="flex gap-8 items-center">
+      <div className="flex lg:gap-8 gap-4 items-center">
         <Link
           href="/app/camps"
           className="text-sm text-gray-200 hover:text-white"
         >
           CAMPGROUNDS
         </Link>
-        <Link
+        {/* <Link
           href="/app/camps"
           className="text-sm text-gray-200 hover:text-white"
         >
           EVENTS
-        </Link>
+        </Link> */}
         <div
           className="flex gap-2 shadow-lg items-center rounded-full py-1 px-1.5 bg-white cursor-pointer"
           onClick={() => setIsOpen(!isOpen)}

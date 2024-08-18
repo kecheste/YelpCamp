@@ -213,7 +213,7 @@ function Page() {
   };
 
   return (
-    <div className="w-full relative bg-gray-100 relative h-screen flex flex-col items-center px-32">
+    <div className="w-full relative bg-gray-100 relative lg:h-screen h-full flex flex-col items-center lg:px-32 px-2">
       {(createCampOpen ||
         detailsOpen ||
         favoritesOpen ||
@@ -244,8 +244,8 @@ function Page() {
       )}
       <HeaderCamps handleSearch={setQuery} />
       <Toaster />
-      <div className="flex items-center gap-2 w-full h-1/2 mb-2">
-        <div className="w-full h-full rounded-lg shadow-sm z-0 border-2 border-white">
+      <div className="flex lg:flex-row flex-col gap-2 w-full h-1/2 mb-2">
+        <div className="w-full lg:h-[400px] h-[280px] rounded-lg shadow-sm z-0 border-2 border-white">
           <Map
             setSelectedLocation={setSelectedLocation}
             campgrounds={filteredCampgrounds}
@@ -253,44 +253,48 @@ function Page() {
           />
         </div>
         {isLoadingGeocoding ? (
-          <div className="w-[600px] h-full bg-white rounded-lg flex flex-col items-center py-4 px-6">
+          <div className="lg:w-[600px] w-full lg:h-[400px] h-[240px] bg-white rounded-lg flex flex-col items-center lg:py-4 lg:px-6">
             <Spinner theme="dark" />
           </div>
         ) : (
-          <div className="w-[600px] h-full bg-white rounded-lg flex flex-col items-center py-4 px-6">
-            <p className="text-gray-700 text-3xl font-semibold mt-8">
+          <div className="lg:w-[600px] w-full lg:h-[400px] bg-white rounded-lg flex flex-col items-center lg:py-4 py-2 px-6">
+            <p className="text-gray-700 lg:text-3xl text-2xl font-semibold lg:mt-8 mt-0">
               {cityName}
             </p>
-            <div className="flex items-center gap-3 mt-4">
-              <ImLocation2 size={20} className="text-gray-600" />
-              <p className="text-gray-600 text-md">
+            <div className="flex items-center gap-3 lg:mt-4 mt-1">
+              <ImLocation2 className="text-gray-600 lg:text-lg text-sm" />
+              <p className="text-gray-600 lg:text-lg text-sm">
                 {Math.round(distance! / 1000)} Km from your current location
               </p>
             </div>
-            <div className="flex items-center gap-3 mt-4">
-              <FaCampground size={20} className="text-gray-600" />
-              <p className="text-gray-600 text-md">
+            <div className="flex items-center gap-3 lg:mt-4 mt-1">
+              <FaCampground className="text-gray-600 lg:text-lg text-sm" />
+              <p className="text-gray-600 lg:text-lg text-sm">
                 {nearbyCampgrounds.length || 0} Campgrounds found nearby
               </p>
             </div>
-            <div className="flex items-center flex-wrap gap-4 mt-8">
-              <div className="flex flex-col items-center gap-2 border w-[110px] h-auto border-gray-300 bg-gray-50 rounded-lg py-2 px-1">
-                <CiGlobe size={35} className="text-gray-600" />
-                <p className="text-gray-600 text-sm">{totalVisits}k Visits</p>
+            <div className="flex items-center flex-wrap gap-4 lg:mt-8 mt-2">
+              <div className="flex flex-col items-center lg:gap-2 gap-1 border lg:w-[110px] w-[80px] h-auto border-gray-300 bg-gray-50 rounded-lg lg:py-2 py-1 px-1">
+                <CiGlobe className="text-gray-600 lg:text-3xl text-xl" />
+                <p className="text-gray-600 lg:text-sm text-[11px]">
+                  {totalVisits}k Visits
+                </p>
               </div>
-              <div className="flex flex-col items-center gap-2 border w-[110px] h-auto border-gray-300 bg-gray-50 rounded-lg py-2 px-1">
-                <CiStar size={35} className="text-gray-600" />
-                <p className="text-gray-600 text-sm">{averageRating} Ratings</p>
+              <div className="flex flex-col items-center lg:gap-2 gap-1 border lg:w-[110px] w-[80px] h-auto border-gray-300 bg-gray-50 rounded-lg lg:py-2 py-1 px-1">
+                <CiStar className="text-gray-600 lg:text-3xl text-xl" />
+                <p className="text-gray-600 lg:text-sm text-[11px]">
+                  {averageRating} Ratings
+                </p>
               </div>
-              <div className="flex flex-col items-center gap-2 border w-[110px] h-auto border-gray-300 bg-gray-50 rounded-lg py-2 px-1">
-                <MdFavoriteBorder size={35} className="text-gray-600" />
-                <p className="text-gray-600 text-sm">
+              <div className="flex flex-col items-center lg:gap-2 gap-1 border lg:w-[110px] w-[80px] h-auto border-gray-300 bg-gray-50 rounded-lg lg:py-2 py-1 px-1">
+                <MdFavoriteBorder className="text-gray-600 lg:text-3xl text-xl" />
+                <p className="text-gray-600 lg:text-sm text-[11px]">
                   {totalFavorites}k Favorites
                 </p>
               </div>
             </div>
             <button
-              className="bg-sky-500 hover:bg-sky-600 text-white rounded-full w-full py-2 text-md mt-8"
+              className="bg-sky-500 hover:bg-sky-600 text-white rounded-full w-full lg:py-2 py-1 lg:text-md text-sm lg:mt-8 mt-3"
               onClick={getPosition}
             >
               Show Nearby Camps
@@ -299,7 +303,7 @@ function Page() {
         )}
       </div>
 
-      <div className="h-1/2 rounded-lg mb-4 w-full flex flex-wrap items-center gap-4 overflow-y-scroll pr-2">
+      <div className="lg:h-1/2 h-[300px] rounded-lg lg:mb-4 mb-2 w-full flex flex-wrap lg:items-center gap-4 overflow-y-scroll pr-2">
         {isLoading ? (
           <Spinner theme="dark" />
         ) : (

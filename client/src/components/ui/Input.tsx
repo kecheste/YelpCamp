@@ -9,7 +9,7 @@ type InputProps = InputHTMLAttributes<HTMLInputElement>;
 const Input = (props: InputProps) => {
   return (
     <input
-      className="border text-md text-gray-600 rounded-lg px-4 py-2 outline-none focus:border-gray-400 min-w-[400px]"
+      className="border text-md text-gray-600 rounded-lg px-4 py-2 outline-none focus:border-gray-400 lg:min-w-[400px] w-full"
       {...props}
     />
   );

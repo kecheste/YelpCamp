@@ -48,7 +48,7 @@ function CampgroundCard({
         });
       }}
       className={
-        "flex relative flex-col gap-2 bg-white p-4 mb-2 rounded-xl w-[310px] h-[340px] cursor-pointer " +
+        "flex relative flex-col lg:gap-2 gap-1 bg-white lg:p-4 p-1 mb-2 rounded-xl lg:w-[310px] w-[170px] lg:h-[340px] h-[180px] cursor-pointer " +
         (selectedCampground === campground._id
           ? "border border-orange-300"
           : "")
@@ -61,25 +61,31 @@ function CampgroundCard({
         height={300}
         className="w-full h-1/2 object-cover bg-center rounded-lg"
       />
-      <div className="flex items-center gap-1">
-        <IoLocationOutline size={16} color="black" />
-        <p className="text-gray-600 text-sm">{campground.location}</p>
+      <div className="flex items-center lg:gap-1 gap-0">
+        <IoLocationOutline className="text-gray-600 lg:text-lg text-[12px]" />
+        <p className="text-gray-600 lg:text-lg text-[11px] mt-1">
+          {campground.location}
+        </p>
       </div>
-      <h2 className="font-medium text-lg text-gray-700">{campground.title}</h2>
-      <div className="flex items-center gap-2 justify-between">
+      <h2 className="font-medium lg:text-xl text-sm text-gray-700">
+        {campground.title}
+      </h2>
+      <div className="flex items-center lg:gap-2 gap-0 justify-between">
         <div className="flex items-center gap-1">
-          <FaCampground size={15} className="text-gray-400" />
-          <p className="text-gray-500">
+          <FaCampground className="text-gray-400 lg:text-sm text-[11px]" />
+          <p className="text-gray-500 lg:text-lg text-[10px]">
             {nearbyCampgrounds} nearby campgrounds
           </p>
         </div>
         <div className="bg-orange-400 px-2 rounded-2xl">
-          <p className="text-white">${campground.price}</p>
+          <p className="text-white lg:text-sm text-[10px]">
+            ${campground.price}
+          </p>
         </div>
       </div>
       <button
         onClick={() => setDetailsOpen(true)}
-        className="bg-sky-500 hover:bg-sky-600 text-white rounded-full w-full py-2 text-md"
+        className="bg-sky-500 hover:bg-sky-600 text-white rounded-full w-full lg:py-2 py-0 lg:text-md text-[12px]"
       >
         Show Details
       </button>

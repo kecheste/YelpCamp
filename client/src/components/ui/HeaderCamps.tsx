@@ -65,12 +65,12 @@ function HeaderCamps({
   };
 
   return (
-    <div className="flex bg-white items-center justify-between py-2 px-6 w-full my-6 border border-gray-300 shadow-md rounded-full">
+    <div className="flex bg-white items-center justify-between py-2 lg:px-6 px-4 w-full lg:my-6 my-3 gap-4 lg:gap-0 border border-gray-300 shadow-md rounded-full">
       <Link href="/app/camps" className="text-lg text-gray-800">
         YelpCamp
       </Link>
-      <div className="flex items-center gap-2 px-4 py-2 border border-gray-300 hover:border-gray-400 rounded-full w-[400px]">
-        <CiSearch size={20} className="text-gray-400" />
+      <div className="flex items-center gap-2 lg:px-4 px-2 lg:py-2 py-1 border border-gray-300 hover:border-gray-400 rounded-full lg:w-[400px] w-full">
+        <CiSearch className="text-gray-400 text-xl" />
         <input
           placeholder="Search campgrounds.."
           value={query}
@@ -107,7 +107,7 @@ function HeaderCamps({
         </div>
         {authWindowOpen &&
           (user ? (
-            <div className="w-[200px] h-[70px] bg-white rounded-lg shadow-lg absolute top-20 mt-2 mr-12 right-20 bottom-0 z-30 flex flex-col p-4 justify-center">
+            <div className="w-[200px] h-[70px] bg-white rounded-lg shadow-lg absolute lg:top-20 top-14 mt-2 mr-12 lg:right-20 -right-5 bottom-0 z-30 flex flex-col p-4 justify-center">
               <Link
                 href="/app/account"
                 className="text-gray-600 hover:text-black text-md"
@@ -124,7 +124,7 @@ function HeaderCamps({
               </Link>
             </div>
           ) : (
-            <div className="w-[200px] h-[70px] bg-white rounded-lg shadow-lg absolute top-20 mt-2 mr-12 right-20 bottom-0 z-30 flex flex-col p-4 justify-center">
+            <div className="w-[200px] h-[70px] bg-white rounded-lg shadow-lg absolute lg:top-20 top-14 mt-2 mr-12 lg:right-20 -right-5 bottom-0 z-30 flex flex-col p-4 justify-center">
               <a
                 href="#"
                 onClick={handleOpenSignUp}
