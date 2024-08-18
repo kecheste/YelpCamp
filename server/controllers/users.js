@@ -104,8 +104,10 @@ module.exports.loginUser = async (req, res, next) => {
 
 module.exports.getUser = (req, res) => {
   const token = req.cookies.token;
+  console.log(token);
 
   if (!token) {
+    console.log("No token found");
     return res
       .status(403)
       .json({ success: false, message: "User not authenticated" });
