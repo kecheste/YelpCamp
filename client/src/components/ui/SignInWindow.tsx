@@ -23,7 +23,6 @@ function SignInWindow() {
     try {
       if (username.length > 6 && password.length > 6) {
         await login(username, password);
-        await checkAuth();
 
         const { loading, user, error } = useAuthStore.getState();
 
