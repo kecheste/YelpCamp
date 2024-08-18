@@ -12,17 +12,21 @@ module.exports.registerUser = async (req, res, next) => {
     }
 
     if (password.length < 6) {
-      return res.status(400).json({
-        success: false,
-        message: "Password must be at least 6 characters",
-      });
+      return res
+        .status(400)
+        .json({
+          success: false,
+          message: "Password must be at least 6 characters",
+        });
     }
 
     if (username.length < 4) {
-      return res.status(400).json({
-        success: false,
-        message: "Username must be at least 4 characters",
-      });
+      return res
+        .status(400)
+        .json({
+          success: false,
+          message: "Username must be at least 4 characters",
+        });
     }
 
     const existingUser = await User.findOne({ username });
@@ -42,7 +46,11 @@ module.exports.registerUser = async (req, res, next) => {
       return res.status(201).json({
         success: true,
         message: "User registered successfully",
-        user: registeredUser,
+        user: {
+          id: registeredUser._id,
+          username: registeredUser.username,
+          email: registeredUser.email,
+        },
       });
     });
   } catch (e) {
@@ -53,19 +61,29 @@ module.exports.registerUser = async (req, res, next) => {
 module.exports.loginUser = (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) {
-      return res.send({ message: "Failed to Authenticate", success: false });
+      return res
+        .status(500)
+        .json({ success: false, message: "Failed to authenticate" });
     }
     if (!user) {
-      return res.send({ message: "Authentication Failed", success: false });
+      return res
+        .status(401)
+        .json({ success: false, message: "Authentication failed" });
     }
     req.login(user, (err) => {
       if (err) {
-        return res.send({ message: "An error occurred", success: false });
+        return res
+          .status(500)
+          .json({ success: false, message: "An error occurred" });
       }
-      return res.send({
-        message: "User logged in",
+      return res.status(200).json({
         success: true,
-        user: user,
+        message: "User logged in successfully",
+        user: {
+          id: user._id,
+          username: user.username,
+          email: user.email,
+        },
       });
     });
   })(req, res, next);
@@ -73,29 +91,60 @@ module.exports.loginUser = (req, res, next) => {
 
 module.exports.getUser = (req, res, next) => {
   if (req.isAuthenticated()) {
-    console.log("User authenticated: ", req.user);
-    return res.json({ user: req.user });
+    return res.status(200).json({
+      success: true,
+      user: {
+        id: req.user._id,
+        username: req.user.username,
+        email: req.user.email,
+      },
+    });
   } else {
-    console.log("No user authenticated");
-    return res.json({ user: null }).status(403);
+    return res
+      .status(403)
+      .json({ success: false, message: "User not authenticated" });
   }
 };
 
 module.exports.getAllFavorites = async (req, res) => {
-  const user = await User.findById(req.user._id).populate("favorites");
-  res.json(user.favorites);
+  try {
+    const user = await User.findById(req.user._id).populate("favorites");
+    res.status(200).json({ success: true, favorites: user.favorites });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to fetch favorites" });
+  }
 };
 
 module.exports.getMyCampgrounds = async (req, res) => {
-  const user = await User.findById(req.user._id).populate("campgrounds");
-  res.json(user.campgrounds);
+  try {
+    const user = await User.findById(req.user._id).populate("campgrounds");
+    res.status(200).json({ success: true, campgrounds: user.campgrounds });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to fetch campgrounds" });
+  }
 };
 
 module.exports.logoutUser = (req, res) => {
-  req.logout(function (err) {
+  req.logout((err) => {
     if (err) {
-      return res.send({ message: "Failed to logout", success: false });
+      return res
+        .status(500)
+        .json({ success: false, message: "Failed to logout" });
     }
-    return res.send({ message: "User logged out", success: true });
+    req.session.destroy((err) => {
+      if (err) {
+        return res
+          .status(500)
+          .json({ success: false, message: "Failed to destroy session" });
+      }
+      res.clearCookie("session"); // Clear session cookie on logout
+      return res
+        .status(200)
+        .json({ success: true, message: "User logged out" });
+    });
   });
 };

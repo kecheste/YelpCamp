@@ -84,7 +84,7 @@ const sessionConfig = {
     secure: true,
     expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
     maxAge: 1000 * 60 * 60 * 24 * 7,
-    sameSite: "none",
+    sameSite: "lax",
   },
 };
 
@@ -142,11 +142,10 @@ app.use(
 app.use(session(sessionConfig));
 app.use(cookieParser(secret));
 
-app.use(passport.authenticate("session"));
 app.use(passport.initialize());
-app.use(passport.session());
+app.use(passport.authenticate("session"));
+// app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
-
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
