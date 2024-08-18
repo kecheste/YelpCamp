@@ -80,7 +80,7 @@ function HeaderCamps({
       </div>
       <div className="flex gap-8 items-center">
         {user && (
-          <>
+          <div className="lg:flex items-center hidden gap-8">
             <Link
               href="#"
               className="text-sm text-gray-700 hover:text-black"
@@ -95,7 +95,7 @@ function HeaderCamps({
             >
               Favorites
             </Link>{" "}
-          </>
+          </div>
         )}
         <div
           className="flex gap-2 shadow-lg items-center rounded-full py-1 px-1.5 bg-white cursor-pointer"
@@ -107,10 +107,34 @@ function HeaderCamps({
         </div>
         {authWindowOpen &&
           (user ? (
-            <div className="w-[200px] h-[70px] bg-white rounded-lg shadow-lg absolute lg:top-20 top-14 mt-2 mr-12 lg:right-20 -right-5 bottom-0 z-30 flex flex-col p-4 justify-center">
+            <div className="w-[200px] lg:h-[80px] h-[140px] bg-white rounded-lg shadow-lg absolute lg:top-20 top-14 mt-2 mr-12 lg:right-20 -right-5 bottom-0 z-30 flex flex-col p-4 justify-center">
+              {user && (
+                <div className="flex flex-col items-start lg:hidden gap-1">
+                  <Link
+                    href="#"
+                    className="text-md text-gray-700 hover:text-black border-b border-gray-300 w-full"
+                    onClick={() => {
+                      setCreateCampOpen(true);
+                      setAuthWindowOpen(false);
+                    }}
+                  >
+                    Create Campground
+                  </Link>
+                  <Link
+                    href="#"
+                    className="text-md text-gray-700 hover:text-black border-b border-gray-300 w-full"
+                    onClick={() => {
+                      setFavoritesOpen(true);
+                      setAuthWindowOpen(false);
+                    }}
+                  >
+                    Favorites
+                  </Link>{" "}
+                </div>
+              )}
               <Link
                 href="/app/account"
-                className="text-gray-600 hover:text-black text-md"
+                className="text-gray-600 hover:text-black text-md border-b border-gray-300 w-full"
                 onClick={() => setAuthWindowOpen(false)}
               >
                 Account
@@ -118,7 +142,7 @@ function HeaderCamps({
               <Link
                 href="#"
                 onClick={handleLogOut}
-                className="text-gray-600 hover:text-black text-md"
+                className="text-gray-600 mt-3 text-white text-md rounded-full bg-red-500 px-4 py-1"
               >
                 Log Out
               </Link>

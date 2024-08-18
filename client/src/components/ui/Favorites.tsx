@@ -13,7 +13,7 @@ function Favorites() {
   const setFavoritesOpen = useWindowStore((state) => state.setFavoritesOpen);
 
   return (
-    <div className="absolute w-[1000px] h-2/3 bg-white rounded-lg flex items-center justify-center top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30">
+    <div className="absolute lg:w-[1000px] w-full lg:h-2/3 h-full bg-white rounded-lg flex items-center justify-center top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30">
       <div className="flex flex-col divide-y divide-gray-400 items-center gap-4 h-full w-full">
         <div className="flex items-center gap-6 px-4 pt-2 self-start w-full">
           <div
@@ -24,7 +24,7 @@ function Favorites() {
           </div>
           <p className="text-black">Favorites</p>
         </div>
-        <div className="h-full mb-4 w-full flex flex-wrap gap-4 overflow-y-scroll p-4 bg-gray-100">
+        <div className="h-full mb-4 w-full flex flex-wrap lg:gap-4 gap-3 overflow-y-scroll lg:p-4 p-2 bg-gray-100">
           {favorites.map((favorite: any) => (
             <CampgroundCard
               key={favorite._id}

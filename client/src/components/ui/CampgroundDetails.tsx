@@ -78,7 +78,7 @@ function CampgroundDetails({ campground }: { campground: Campground }) {
   };
 
   return (
-    <div className="absolute lg:w-3/4 lg:h-auto h-screen w-full bg-white rounded-lg flex items-center top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30 overflow-y-scroll">
+    <div className="absolute lg:w-3/4 lg:h-auto lg:h-max-3/4 h-screen w-full bg-white rounded-lg flex items-center top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30 lg:overflow-y-hidden overflow-y-scroll">
       <div className="flex lg:flex-row flex-col w-full h-full gap-4 lg:p-4 p-1.5 relative">
         <div className="absolute">
           <button
@@ -139,7 +139,7 @@ function CampgroundDetails({ campground }: { campground: Campground }) {
           </div>
         </div>
         <div className="flex flex-col lg:gap-4 gap-2 w-full">
-          <div className="rounded-lg shadow-md border-2 border-white z-0 w-full lg:h-[350px] h-[300px]">
+          <div className="rounded-lg shadow-md border-2 border-white z-0 w-full lg:h-[350px] h-[250px]">
             <Map
               campgrounds={[campground]}
               posix={[campground.position.lat, campground.position.lng]}
@@ -172,7 +172,7 @@ function CampgroundDetails({ campground }: { campground: Campground }) {
           >
             Create Review
           </LoadingButton>
-          <div className="flex flex-wrap items-center gap-2 lg:h-[200px] max-h-[250px] overflow-y-scroll pr-1">
+          <div className="flex flex-wrap items-center gap-2 lg:h-[200px] max-h-[250px] overflow-y-scroll pr-1 mb-10 lg:mb-0">
             {reviews.map((review, index) => (
               <div
                 key={index}

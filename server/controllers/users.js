@@ -83,8 +83,9 @@ module.exports.loginUser = async (req, res, next) => {
       secure: process.env.NODE_ENV === "production",
       maxAge: 1000 * 60 * 60 * 24 * 7,
       sameSite: "None",
-      // domain: "http://localhost:3000",
       domain: "https://yelp-camp-kohl.vercel.app",
+      // sameSite: "lax",
+      // domain: "http://localhost:3000",
     });
 
     res.status(200).json({
@@ -105,10 +106,7 @@ module.exports.loginUser = async (req, res, next) => {
 
 module.exports.getUser = (req, res) => {
   const token = req.cookies.token;
-  console.log(token);
-
   if (!token) {
-    console.log("No token found");
     return res
       .status(403)
       .json({ success: false, message: "User not authenticated" });

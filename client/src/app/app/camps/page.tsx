@@ -253,11 +253,11 @@ function Page() {
           />
         </div>
         {isLoadingGeocoding ? (
-          <div className="lg:w-[600px] w-full lg:h-[400px] h-[240px] bg-white rounded-lg flex flex-col items-center lg:py-4 lg:px-6">
+          <div className="lg:w-[600px] w-full lg:h-[400px] h-[200px] bg-white rounded-lg flex flex-col items-center lg:py-4 lg:px-6">
             <Spinner theme="dark" />
           </div>
         ) : (
-          <div className="lg:w-[600px] w-full lg:h-[400px] bg-white rounded-lg flex flex-col items-center lg:py-4 py-2 px-6">
+          <div className="lg:w-[600px] w-full lg:h-[400px] h-[200px] bg-white rounded-lg flex flex-col items-center lg:py-4 py-2 px-6">
             <p className="text-gray-700 lg:text-3xl text-2xl font-semibold lg:mt-8 mt-0">
               {cityName}
             </p>
@@ -303,7 +303,7 @@ function Page() {
         )}
       </div>
 
-      <div className="lg:h-1/2 h-[300px] rounded-lg lg:mb-4 mb-2 w-full flex flex-wrap lg:items-center gap-4 overflow-y-scroll pr-2">
+      <div className="lg:h-1/2 h-[300px] rounded-lg lg:mb-4 mb-4 pb-12 lg:pb-0 w-full flex flex-wrap lg:items-center lg:gap-4 gap-1 overflow-y-scroll lg:pr-2 pr-1">
         {isLoading ? (
           <Spinner theme="dark" />
         ) : (

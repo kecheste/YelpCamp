@@ -108,8 +108,8 @@ function EditCampgroundWindow({
   };
 
   return (
-    <div className="absolute w-auto h-auto bg-white rounded-lg flex items-center justify-center top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30">
-      <div className="flex flex-col divide-y divide-gray-400 items-center gap-4">
+    <div className="absolute lg:w-auto w-full lg:h-auto h-screen bg-white rounded-lg flex items-center justify-center top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30 overflow-y-scroll p-2 py-4 pt-12 lg:p-0">
+      <div className="flex flex-col divide-y divide-gray-400 items-center gap-4 w-full">
         <div className="flex items-center gap-6 px-4 pt-2 self-start w-full">
           <div
             className="cursor-pointer"
@@ -119,9 +119,8 @@ function EditCampgroundWindow({
           </div>
           <p className="text-black">Edit Campground</p>
         </div>
-
-        <div className="flex gap-2">
-          <div className="flex gap-4 flex-col px-2 py-4 sm:px-4 lg:px-6">
+        <div className="flex lg:flex-row flex-col gap-2 w-full">
+          <div className="flex lg:gap-4 gap-2 flex-col lg:px-2 lg:py-4 py-2 lg:px-6">
             <Input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
@@ -129,7 +128,7 @@ function EditCampgroundWindow({
               name="title"
               type="text"
             />
-            <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-5">
+            <div className="lg:mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-5">
               <div className="text-center">
                 <IoMdPhotos className="mx-auto h-12 w-12 text-gray-300" />
                 <div className="mt-4 flex text-sm leading-6 text-gray-600">
@@ -173,8 +172,8 @@ function EditCampgroundWindow({
               type="number"
             />
           </div>
-          <div className="flex flex-col gap-4 mr-6">
-            <div className="w-[600px] h-[300px] rounded-lg z-0 my-4 shadow-sm">
+          <div className="flex flex-col gap-4 lg:mr-6">
+            <div className="lg:w-[600px] w-full lg:h-[300px] h-[250px] rounded-lg z-0 lg:my-4 shadow-sm">
               <Map
                 setSelectedLocation={setSelectedLocation}
                 posix={selectedLocation}
@@ -191,11 +190,12 @@ function EditCampgroundWindow({
             />
           </div>
         </div>
-        <div className="w-full mb-3 pt-3 px-6 flex items-center gap-2">
+        <div className="w-full lg:mb-3 pt-3 lg:px-6 flex items-center gap-2">
           <LoadingButton
             onClick={() => updateCampground()}
             disabled={loading}
             loading={loading}
+            className="transition-colors lg:text-md text-sm w-full bg-sky-400 text-white font-medium px-4 py-3 rounded-md hover:bg-sky-500 disabled:bg-sky-300"
           >
             Edit Campground
           </LoadingButton>
@@ -203,7 +203,7 @@ function EditCampgroundWindow({
             onClick={() => deleteCampground()}
             disabled={loadingDelete}
             loading={loadingDelete}
-            className="transition-colors w-full bg-red-400 text-white font-medium px-4 py-3 rounded-md hover:bg-red-500 disabled:bg-red-300"
+            className="transition-colors lg:text-md text-sm w-full bg-red-400 text-white font-medium px-4 py-3 rounded-md hover:bg-red-500 disabled:bg-red-300"
           >
             Delete Campground
           </LoadingButton>

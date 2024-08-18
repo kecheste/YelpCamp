@@ -37,6 +37,9 @@ function CampgroundCard({
   );
   const setDetailsOpen = useWindowStore((state) => state.setDetailsOpen);
   const setEditWindowOpen = useWindowStore((state) => state.setEditWindowOpen);
+  const setFavoriteWindowOpen = useWindowStore(
+    (state) => state.setFavoritesOpen
+  );
 
   return (
     <div
@@ -48,7 +51,7 @@ function CampgroundCard({
         });
       }}
       className={
-        "flex relative flex-col lg:gap-2 gap-1 bg-white lg:p-4 p-1 mb-2 rounded-xl lg:w-[310px] w-[170px] lg:h-[340px] h-[180px] cursor-pointer " +
+        "flex relative flex-col lg:gap-2 gap-1 bg-white lg:p-4 p-1 mb-2 rounded-xl lg:w-[310px] w-[180px] lg:h-[340px] h-[200px] cursor-pointer " +
         (selectedCampground === campground._id
           ? "border border-orange-300"
           : "")
@@ -90,10 +93,10 @@ function CampgroundCard({
         Show Details
       </button>
       {user && (
-        <div className="absolute top-7 right-7 flex flex-col gap-2">
+        <div className="absolute lg:top-7 top-3 lg:right-7 right-3 flex flex-col gap-2">
           <div
             className={
-              "rounded-full p-2.5 cursor-pointer " +
+              "rounded-full lg:p-2.5 p-2 cursor-pointer " +
               (isFavorite(favorites, campground._id)
                 ? "bg-red-500 hover:bg-red-600"
                 : "bg-white hover:bg-gray-100")
@@ -114,7 +117,10 @@ function CampgroundCard({
               <MdEdit
                 size={15}
                 className="text-white"
-                onClick={() => setEditWindowOpen(true)}
+                onClick={() => {
+                  setEditWindowOpen(true);
+                  setFavoriteWindowOpen(false);
+                }}
               />
             </div>
           )}
