@@ -2,18 +2,8 @@ const { campSchema, reviewSchema } = require("./schemas");
 const AppError = require("./utils/AppError");
 const Campground = require("./models/campground");
 const Review = require("./models/review");
-
-module.exports.isLoggedIn = (req, res, next) => {
-  if (!req.isAuthenticated()) {
-    return res.json(req.user);
-  }
-  next();
-};
-
-module.exports.isAuth = (req, res, next) => {
-  if (req.user) next();
-  res.json({ loggedIn: false });
-};
+const jwt = require("jsonwebtoken");
+const User = require("./models/user");
 
 module.exports.validateInput = (req, res, next) => {
   const filteredBody = {};
@@ -24,7 +14,6 @@ module.exports.validateInput = (req, res, next) => {
     }
     filteredBody["position"] = JSON.parse(req.body.position);
   }
-  console.log(filteredBody);
   const { error } = campSchema.validate(filteredBody);
   if (error) {
     const msg = error.details.map((el) => el.message).join(",");
@@ -55,11 +44,26 @@ module.exports.validateReview = (req, res, next) => {
 
 module.exports.isReviewAuthor = async (req, res, next) => {
   const { id, reviewId } = req.params;
-  const review = await Review.findById(reviewId);
+  const review = await Review.findById(reviewId).populate("author");
   if (!review.author.equals(req.user._id)) {
     return res
       .status(403)
       .json({ error: "You do not have permission to do that" });
   }
   next();
+};
+
+module.exports.isAuth = (req, res, next) => {
+  const token = req.cookies.token;
+  if (!token) {
+    return res.status(403).json({ message: "User not authenticated" });
+  }
+  jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
+    if (err) {
+      return res.status(203).json({ message: "Invalid token" });
+    }
+    const user = await User.findById(decoded._id);
+    req.user = user;
+    next();
+  });
 };

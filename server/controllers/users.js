@@ -1,5 +1,9 @@
-const passport = require("passport");
 const User = require("../models/user");
+const userService = require("../services/signUp");
+const authService = require("../services/logIn");
+const bcrypt = require("bcrypt");
+const { generateToken } = require("../utils/jwtUtils");
+const jwt = require("jsonwebtoken");
 
 module.exports.registerUser = async (req, res, next) => {
   try {
@@ -18,10 +22,17 @@ module.exports.registerUser = async (req, res, next) => {
       });
     }
 
-    if (username.length < 4) {
+    if (username.length < 6) {
       return res.status(400).json({
         success: false,
-        message: "Username must be at least 4 characters",
+        message: "Username must be at least 6 characters",
+      });
+    }
+
+    if (email.length < 6) {
+      return res.status(400).json({
+        success: false,
+        message: "Email must be at least 6 characters",
       });
     }
 
@@ -32,74 +43,100 @@ module.exports.registerUser = async (req, res, next) => {
         .json({ success: false, message: "Username already taken" });
     }
 
-    const user = new User({ email, username });
-    const registeredUser = await User.register(user, password);
+    const salt = await bcrypt.genSalt(10);
+    const user = await userService.createUser({
+      email,
+      username,
+      password,
+      salt,
+    });
 
-    req.login(registeredUser, (err) => {
-      if (err) {
-        return next(err);
-      }
+    if (user) {
       return res.status(201).json({
         success: true,
         message: "User registered successfully",
         user: {
-          id: registeredUser._id,
-          username: registeredUser.username,
-          email: registeredUser.email,
-        },
-      });
-    });
-  } catch (e) {
-    return res.status(500).json({ success: false, message: e.message });
-  }
-};
-
-module.exports.loginUser = (req, res, next) => {
-  passport.authenticate("local", async (err, user, info) => {
-    if (err) {
-      return res
-        .status(500)
-        .json({ success: false, message: "Failed to authenticate" });
-    }
-    if (!user) {
-      return res
-        .status(401)
-        .json({ success: false, message: "Authentication failed" });
-    }
-    await req.login(user, (err) => {
-      if (err) {
-        return res
-          .status(500)
-          .json({ success: false, message: "An error occurred" });
-      }
-      return res.status(200).json({
-        success: true,
-        message: "User logged in successfully",
-        user: {
-          id: user._id,
+          _id: user._id,
           username: user.username,
           email: user.email,
         },
       });
-    });
-  })(req, res, next);
+    } else {
+      return res.status(400).json({
+        success: false,
+        message: "Failed to register user",
+      });
+    }
+  } catch (e) {
+    return res.status(400).json({ success: false, message: e.message });
+  }
 };
 
-module.exports.getUser = (req, res, next) => {
-  if (req.user) {
-    return res.status(200).json({
+module.exports.loginUser = async (req, res, next) => {
+  try {
+    const { username, password } = req.body;
+    const user = await authService.logInUser(username, password);
+    const token = generateToken(user);
+    req.user = user;
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+      sameSite: false,
+    });
+
+    res.status(200).json({
       success: true,
+      message: "Logged in successfully",
       user: {
-        id: req.user._id,
-        username: req.user.username,
-        email: req.user.email,
+        _id: user._id,
+        username: user.username,
+        email: user.email,
       },
     });
-  } else {
+  } catch (e) {
     return res
-      .status(203)
+      .status(401)
+      .json({ success: false, message: "Invalid credentials" });
+  }
+};
+
+module.exports.getUser = (req, res) => {
+  const token = req.cookies.token;
+
+  if (!token) {
+    return res
+      .status(403)
       .json({ success: false, message: "User not authenticated" });
   }
+
+  jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
+    if (err) {
+      return res.status(403).json({ success: false, message: "Invalid token" });
+    }
+
+    try {
+      const user = await User.findById(decoded._id);
+
+      if (!user) {
+        return res
+          .status(404)
+          .json({ success: false, message: "User not found" });
+      }
+
+      return res.status(200).json({
+        success: true,
+        user: {
+          _id: user._id,
+          username: user.username,
+          email: user.email,
+        },
+      });
+    } catch (e) {
+      return res.status(500).json({ success: false, message: "Server error" });
+    }
+  });
 };
 
 module.exports.getAllFavorites = async (req, res) => {
@@ -125,22 +162,6 @@ module.exports.getMyCampgrounds = async (req, res) => {
 };
 
 module.exports.logoutUser = (req, res) => {
-  req.logout((err) => {
-    if (err) {
-      return res
-        .status(500)
-        .json({ success: false, message: "Failed to logout" });
-    }
-    req.session.destroy((err) => {
-      if (err) {
-        return res
-          .status(500)
-          .json({ success: false, message: "Failed to destroy session" });
-      }
-      res.clearCookie("session"); // Clear session cookie on logout
-      return res
-        .status(200)
-        .json({ success: true, message: "User logged out" });
-    });
-  });
+  res.clearCookie("token");
+  return res.status(200).json({ success: true, message: "User logged out" });
 };

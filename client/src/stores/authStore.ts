@@ -33,7 +33,9 @@ export const useAuthStore = create<AuthState>((set) => ({
       const response = await api.post("/login", { username, password });
       console.log(response);
       if (response.data.success) {
-        set({ user: response.data.user, loading: false, error: null });
+        // localStorage.setItem("token", response.data.token);
+        await useAuthStore.getState().checkAuth();
+        // set({ user: res.data.user, loading: false, error: null });
       } else {
         set({ user: null, loading: false, error: response.data.message });
       }
@@ -85,7 +87,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     try {
       set({ loading: true });
       const res = await api.get("/getAllFavorites");
-      set({ favorites: res.data, loading: false, error: null });
+      set({ favorites: res.data.favorites, loading: false, error: null });
     } catch {
       set({ favorites: [] });
     }
@@ -108,7 +110,6 @@ export const useAuthStore = create<AuthState>((set) => ({
     try {
       set({ loading: true });
       const res = await api.get("/getUser");
-      console.log(res);
       if (res.data.user) {
         set({ user: res.data.user, loading: false, error: null });
       } else {
@@ -126,7 +127,8 @@ export const useAuthStore = create<AuthState>((set) => ({
     try {
       set({ loading: true });
       const res = await api.get("/getMyCampgrounds");
-      set({ myCampgrounds: res.data, loading: false, error: null });
+      console.log(res);
+      set({ myCampgrounds: res.data.campgrounds, loading: false, error: null });
       set({ loading: false });
     } catch {
       set({
