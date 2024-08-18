@@ -12,6 +12,7 @@ function SignInWindow() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const login = useAuthStore((set) => set.login);
+  const checkAuth = useAuthStore((state) => state.checkAuth);
 
   const setSignInWindowOpen = useAuthWindowStore(
     (state) => state.setSignInOpen
@@ -22,6 +23,7 @@ function SignInWindow() {
     try {
       if (username.length > 6 && password.length > 6) {
         await login(username, password);
+        await checkAuth();
 
         const { loading, user, error } = useAuthStore.getState();
 
@@ -39,7 +41,7 @@ function SignInWindow() {
             setLoading(false);
           } else {
             toast.dismiss();
-            toast.error("Invalid credentials" + user.username);
+            toast.error("Invalid credentials");
             setLoading(false);
           }
         }
@@ -47,9 +49,9 @@ function SignInWindow() {
         toast.error("Username and password must be at least 6 characters long");
         setLoading(false);
       }
-    } catch (error) {
+    } catch (error: any) {
       toast.dismiss();
-      toast.error("Invalid credentials");
+      toast.error(error.message);
       setLoading(false);
     }
   };
