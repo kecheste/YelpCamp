@@ -11,7 +11,7 @@ const LocalStrategy = require("passport-local");
 const User = require("./models/user");
 const mongoSanitize = require("express-mongo-sanitize");
 const helmet = require("helmet");
-const MongoDBStore = require("connect-mongo");
+const MongoDBStore = require("connect-mongodb-session")(session);
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
@@ -67,13 +67,12 @@ db.once("open", () => {
   console.log("Mongo connection established!!");
 });
 
-const secret = "cZ9$9BgM#a9w8P@sL7*dX!J6LhE2xUvV";
+const secret = process.env.SECRET;
 
 const sessionConfig = {
-  store: MongoDBStore.create({
-    mongoUrl: dbUrl,
-    secret,
-    touchAfter: 24 * 60 * 60 * 24,
+  store: MongoDBStore({
+    uri: dbUrl,
+    collection: "session",
   }),
   name: "session",
   secret,
