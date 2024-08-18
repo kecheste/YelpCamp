@@ -55,7 +55,7 @@ module.exports.registerUser = async (req, res, next) => {
 };
 
 module.exports.loginUser = (req, res, next) => {
-  passport.authenticate("local", async (err, user, info) => {
+  passport.authenticate("local", (err, user, info) => {
     if (err) {
       return res
         .status(500)
@@ -66,7 +66,7 @@ module.exports.loginUser = (req, res, next) => {
         .status(401)
         .json({ success: false, message: "Authentication failed" });
     }
-    await req.login(user, (err) => {
+    req.login(user, (err) => {
       if (err) {
         return res
           .status(500)
