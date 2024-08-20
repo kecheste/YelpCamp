@@ -78,17 +78,17 @@ function CampgroundDetails({ campground }: { campground: Campground }) {
   };
 
   return (
-    <div className="absolute lg:w-3/4 lg:h-auto lg:h-max-3/4 h-screen w-full bg-white rounded-lg flex items-center top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30 lg:overflow-y-hidden overflow-y-scroll">
-      <div className="flex lg:flex-row flex-col w-full h-full gap-4 lg:p-4 p-1.5 relative">
+    <div className="absolute lg:w-3/4 w-full lg:h-auto lg:h-max-3/4 h-full bg-white rounded-lg flex items-center top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30 lg:overflow-y-hidden overflow-y-scroll">
+      <div className="flex lg:flex-row flex-col w-full h-full gap-4 lg:p-4 p-2 relative">
         <div className="absolute">
           <button
             onClick={() => setDetailsOpen(false)}
-            className="absolute lg:-top-1 top-2 lg:-right-8 -right-10 bg-red-500 hover:bg-red-600 text-white rounded-full p-3 z-30"
+            className="absolute lg:-top-1 lg:-right-8 -right-10 bg-red-500 hover:bg-red-600 text-white rounded-full p-3 z-30"
           >
             <IoClose className="text-white text-lg" />
           </button>
         </div>
-        <div className="flex flex-col w-full h-full lg:mt-0 mt-3">
+        <div className="flex flex-col w-full h-full">
           <div className="w-full lg:h-1/2 h-auto object-cover">
             <Carousel>
               {campground.images.map((image, index) => (
@@ -103,7 +103,7 @@ function CampgroundDetails({ campground }: { campground: Campground }) {
               ))}
             </Carousel>
           </div>
-          <div className="text-gray-700 lg:pl-6 ">
+          <div className="text-gray-700 lg:pl-6 lg:mt-0 mt-3">
             <div className="flex items-center justify-between lg:pr-6 pr-2 mb-3">
               <h2 className="lg:text-3xl text-xl font-bold">
                 {campground.title}
@@ -138,7 +138,7 @@ function CampgroundDetails({ campground }: { campground: Campground }) {
             </p>
           </div>
         </div>
-        <div className="flex flex-col lg:gap-4 gap-2 w-full">
+        <div className="flex flex-col lg:gap-4 gap-2 w-full h-auto lg:pb-0 pb-20">
           <div className="rounded-lg shadow-md border-2 border-white z-0 w-full lg:h-[350px] h-[250px]">
             <Map
               campgrounds={[campground]}
@@ -172,29 +172,31 @@ function CampgroundDetails({ campground }: { campground: Campground }) {
           >
             Create Review
           </LoadingButton>
-          <div className="flex flex-wrap items-center gap-2 lg:h-[200px] max-h-[250px] overflow-y-scroll pr-1 mb-10 lg:mb-0">
-            {reviews.map((review, index) => (
-              <div
-                key={index}
-                className="rounded-xl text-black border h-auto shadow-sm py-1 px-6 border-gray-300 flex flex-col gap-1 max-w-[330px]"
-              >
-                <div className="flex gap-2 items-center justify-between">
-                  <p className="text-md font-bold text-gray-700">
-                    {review.author.username}
+          {reviews.length > 0 && (
+            <div className="flex gap-2 flex-wrap lg:h-[250px] max-h-[250px] overflow-y-scroll border border-1 border-gray-200 rounded-md p-2">
+              {reviews.map((review, index) => (
+                <div
+                  key={index}
+                  className="rounded-xl text-black border h-auto shadow-sm py-1 px-6 border-gray-300 flex flex-col gap-1 lg:max-w-[330px] max-w-full"
+                >
+                  <div className="flex gap-2 items-center justify-between">
+                    <p className="text-md font-bold text-gray-700">
+                      {review.author.username}
+                    </p>
+                    <Rating
+                      className="max-w-[150px]"
+                      value={review.rating}
+                      itemStyles={myStyles}
+                      readOnly
+                    />
+                  </div>
+                  <p className="text-sm font-italic text-gray-600">
+                    {review.body}
                   </p>
-                  <Rating
-                    className="max-w-[150px]"
-                    value={review.rating}
-                    itemStyles={myStyles}
-                    readOnly
-                  />
                 </div>
-                <p className="text-sm font-italic text-gray-600">
-                  {review.body}
-                </p>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>
