@@ -82,8 +82,8 @@ module.exports.loginUser = async (req, res, next) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       maxAge: 1000 * 60 * 60 * 24 * 7,
-      sameSite: "lax",
-      domain: "https://yelp-camp-kohl.vercel.app",
+      sameSite: "None",
+      // domain: "https://yelp-camp-kohl.vercel.app",
       // sameSite: "lax",
     });
 
