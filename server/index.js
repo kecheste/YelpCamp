@@ -26,7 +26,7 @@ app.use(
   cors({
     credentials: true,
     origin: "https://yelp-camp-kohl.vercel.app",
-    origin: frontUrl,
+    // origin: frontUrl,
   })
 );
 
